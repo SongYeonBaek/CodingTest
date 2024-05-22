@@ -1,21 +1,22 @@
 class Solution {
     public int solution(int[] money) {
-        int[] dp_first = new int[money.length];
-        int[] dp_second = new int[money.length];
-        
-        for(int i = 0; i < money.length; i++) {
-            dp_first[i] = money[i];
-            dp_second[i] = money[i];
+        int[] dpO = new int[money.length]; //첫집O
+        int[] dpX = new int[money.length]; //첫집X
+        int len = money.length;
+
+        dpO[0] = money[0];
+        dpO[1] = money[0];
+
+        dpX[0] = 0;
+        dpX[1] = money[1];
+
+        for (int i = 2; i < len; i++) {
+			//현재 집을 털지 않는 경우 vs 현재 집을 터는 경우
+            dpO[i] = Math.max(dpO[i - 1], money[i] + dpO[i - 2]);
+            dpX[i] = Math.max(dpX[i - 1], money[i] + dpX[i - 2]);
         }
-        dp_first[1] = -1;
-        dp_second[0] = -1;
-        dp_first[2] += dp_first[0];
-        for (int i = 3; i < money.length; i++) {
-            dp_first[i] += Math.max(dp_first[i - 2], dp_first[i - 3]);
-            dp_second[i] += Math.max(dp_second[i - 2], dp_second[i - 3]);
-        }
-        int first_max = Math.max(dp_first[money.length - 2], dp_first[money.length - 3]);
-        int second_max = Math.max(dp_second[money.length - 1], dp_second[money.length - 2]);
-        return Math.max(first_max, second_max);
+
+		//첫집을 터는 경우, 막집은 못터니까 dpO[len-2]까지만 가능하다
+        return Math.max(dpO[len - 2], dpX[len - 1]);
     }
 }

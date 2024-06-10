@@ -1,48 +1,44 @@
 import java.util.*;
 
 class Solution {
-    public int[] solution(String[] operations) {
-        int[] answer = new int[2];
-        PriorityQueue<Integer> des = new PriorityQueue(Collections.reverseOrder());
-        PriorityQueue<Integer> asc = new PriorityQueue();
+     public static int[] solution (String[] operations) {
+        PriorityQueue<Integer> ascHeap = new PriorityQueue<>();
+        PriorityQueue<Integer> desHeap = new PriorityQueue<>(Collections.reverseOrder());
 
-        for(String s : operations){
-            String j = s.split(" ")[0];
-            Integer v = Integer.parseInt(s.split(" ")[1]);
-
-            if(j.equals("I")) {
-                des.offer(v);
-                asc.offer(v);
+        for(String s: operations){
+            if(s.charAt(0) ==  'I'){
+                System.out.println("I입니다");
+                int num = Integer.parseInt(s.split(" ")[1]);
+                System.out.println(num);
+                ascHeap.offer(num);
+                desHeap.offer(num);
             }
-
-            //D 일 때 - 삭제 연산
             else {
-                //안해주면 null 포인터 에러 뜸
-                if(des.isEmpty()) continue;
-
+                System.out.println("D입니다");
                 //최솟값 삭제
-                else if(v < 0) {
-                    int min = asc.poll();
-                    des.remove(min);
+                if(s.split(" ")[1].equals("-1")) {
+                    Integer i = ascHeap.poll();
+                    System.out.println(i);
+                    desHeap.remove(i);
                 }
 
                 //최댓값 삭제
                 else{
-                    int max = des.poll();
-                    asc.remove(max);
+                    Integer i = desHeap.poll();
+                    System.out.println(i);
+                    ascHeap.remove(i);
                 }
             }
         }
 
-        if(des.isEmpty())
-            return new int[] {0, 0};
-
-        if(des.size() > 0) {
-            answer[0] = des.poll();
-            answer[1] = asc.poll();
+        int[] result = new int[2];
+        if(ascHeap.size() == 0) {
+            return result;
         }
-        
 
-        return answer;
+        result[0] = desHeap.poll();
+        result[1] = ascHeap.poll();
+        System.out.println(result[0] + " " + result[1]);
+        return result;
     }
 }

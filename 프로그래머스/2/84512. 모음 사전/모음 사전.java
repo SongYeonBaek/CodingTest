@@ -1,33 +1,22 @@
 import java.util.*;
 
 class Solution {
-    ArrayList<String> list = new ArrayList<>();
+    static String[] vowel = {"A", "E", "I", "O", "U"};
+    static ArrayList<String> dic = new ArrayList<>();
 
-    public void dfs(String[] s, String result, int length){
-        if(result.length() == length) list.add(result);
+    static void dfs(String s, int length){
+        if(length > 4) return;
 
-        else{
-            for (int i = 0; i < s.length; i++) {
-                dfs(s, result + s[i], length);
-            }
+        for(String v : vowel){
+            dic.add(s+v);
+            dfs(s+v, length+1);
         }
     }
-
-    public int solution(String word) {
-        int answer = 0;
-
-        String[] s = {"A", "E", "I", "O", "U"};
-
-        for (int i = 1; i <= 5; i++) {
-            dfs(s, "", i);
-        }
-
-//        System.out.println(list);
-
-        Collections.sort(list);
-
-//        System.out.println(list);
-
-        return list.indexOf(word) + 1;
+    public static int solution(String word) {
+        dfs("", 0);
+        Collections.sort(dic);
+        System.out.println(dic);
+        return dic.indexOf(word) + 1;
     }
+
 }

@@ -14,7 +14,7 @@ class Solution {
     }
     public static int solution(String word) {
         dfs("", 0);
-        Collections.sort(dic);
+        // Collections.sort(dic);
         System.out.println(dic);
         return dic.indexOf(word) + 1;
     }

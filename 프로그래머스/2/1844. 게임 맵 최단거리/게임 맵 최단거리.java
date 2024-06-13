@@ -1,61 +1,51 @@
 import java.util.*;
 
 class Solution {
-    static int n;
-    static int m;
-    static ArrayList<Integer> result;
-    static boolean[][] visited;
+        static boolean[][] visited;
     static int answer = -1;
 
-    public static void bfs(int x, int y, int[][] maps){
-        int[] dx = {1, 0, -1, 0};
-        int[] dy = {0, 1, 0, -1};
-
+    public static void bfs(int[][] maps, int x, int y){
+        //현재 노드 방문 처리
         visited[y][x] = true;
 
-        Queue<int[]> queue = new LinkedList<>();
-        queue.add(new int[]{x,y,1});
+        int[] dx = {-1, 1, 0, 0};
+        int[] dy = {0,0,-1, 1};
 
-        while(!queue.isEmpty()){
-            int[] loc = queue.poll();
-            x = loc[0];
-            y = loc[1];
-            int count = loc[2];
+        Queue<Integer[]> q = new LinkedList<>();
+        //노드의 x, y, 총 움직인 거리
+        q.offer(new Integer[]{x, y, 1});
 
-            if(x == n-1 && y == m-1) {
-                answer = count;
+        //현재 노드와 인접한 노드 중에서 map 범위 내에 있고, 길이 있는 노드를 찾아서 queue에 넣음
+        //queue가 빌 때까지 노드를 빼내고, bfs를 진행
+        while(!q.isEmpty()){
+            Integer[] a = q.poll();
+
+            //도착점에 도달했으면
+            if(a[0] ==  maps[0].length-1 && a[1] == maps.length-1){
+                answer = a[2];
                 break;
             }
 
+            int nx, ny;
             for (int i = 0; i < 4; i++) {
-                int nx = x + dx[i];
-                int ny = y + dy[i];
+                nx = a[0] + dx[i];
+                ny = a[1] +dy[i];
 
-                if(nx < 0 || nx >= n || ny < 0 || ny >= m) continue;
-                if(maps[ny][nx] == 0) continue;
-                if(!visited[ny][nx] && maps[ny][nx] == 1) {
+                if(nx < 0 || nx >= maps[0].length || ny < 0 || ny >= maps.length) continue;
+                if(maps[ny][nx] == 1 && !visited[ny][nx]) {
                     visited[ny][nx] = true;
-                    queue.add(new int[]{nx, ny, count+1});
+                    q.offer(new Integer[]{nx, ny, a[2] +1});
                 }
             }
         }
-
-
-
     }
 
     public static int solution(int[][] maps) {
-        //세로 길이
-        m = maps.length;
-        //가로 길이
-        n = maps[0].length;
+        visited = new boolean[maps.length][maps[0].length];
 
-        visited = new boolean[m][n];
-
-         bfs(0, 0,  maps);
+        bfs(maps, 0, 0);
 
         return answer;
-
-
     }
+
 }

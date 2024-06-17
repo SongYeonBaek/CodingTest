@@ -31,7 +31,7 @@ public static void main(String[] args) throws Exception {
         //4.슬라이딩 윈도우
         int n = ants.length;
         int left = 0;
-        int maxGroupSize = 0;
+        int maxGroupSize = n;
 
         // 슬라이딩 윈도우를 사용하여 최대 그룹 크기를 찾습니다.
         for (int right = 0; right < n; right++) {
@@ -40,8 +40,8 @@ public static void main(String[] args) throws Exception {
                 left++;
             }
             // 최대 그룹 크기를 갱신합니다.
-            maxGroupSize = Math.max(maxGroupSize, right - left + 1);
+            maxGroupSize = Math.min(maxGroupSize, n - (right - left + 1));
         }
-        System.out.println(n - maxGroupSize);
+        System.out.println(maxGroupSize);
     }
 }

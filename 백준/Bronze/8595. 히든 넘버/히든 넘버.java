@@ -10,24 +10,24 @@ public class Main {
         String str = br.readLine();
 
         long count = 0;  // count를 long으로 변경하여 오버플로우 방지
-        String num = "";
+        StringBuilder num = new StringBuilder();  // String 대신 StringBuilder 사용
         for (int i = 0; i < n; i++) {
             char c = str.charAt(i);
             // 알파벳인 경우
-            if ((65 <= c && c <= 90) || (97 <= c && c <= 122)) {
-                if (!num.equals("") && num.length() <= 6) {
-                    count += Long.parseLong(num);
+            if (Character.isLetter(c)) {
+                if (num.length() > 0 && num.length() <= 6) {
+                    count += Long.parseLong(num.toString());  // num을 long으로 파싱
                 }
-                num = "";
+                num.setLength(0);  // num 초기화
             } else {
                 // 숫자라면
-                num += c;
+                num.append(c);
             }
         }
 
         // 마지막 숫자를 처리
-        if (!num.equals("") && num.length() <= 6) {
-            count += Long.parseLong(num);
+        if (num.length() > 0 && num.length() <= 6) {
+            count += Long.parseLong(num.toString());
         }
 
         System.out.println(count);

@@ -1,39 +1,46 @@
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-public class Main{
-    public static void main(String[] args) throws IOException{
+public class Main {
+    public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuffer sb = new StringBuffer();
+        int t = Integer.parseInt(br.readLine());
 
-        int T = Integer.parseInt(br.readLine());
+        for (int i = 0; i < t; i++) {
+            int n = Integer.parseInt(br.readLine());
 
-        while(T-->0){
-            int N = Integer.parseInt(br.readLine());
-            int[][] arr = new int[2][N];
-            int[][] dp = new int[2][N];
-
-            for(int i = 0; i < 2; i++){
+            int[][] sticker = new int[2][n];
+            for (int j = 0; j < 2; j++) {
                 StringTokenizer st = new StringTokenizer(br.readLine());
-
-                for(int j = 0; j < N; j++)
-                    arr[i][j] = Integer.parseInt(st.nextToken());
+                for (int k = 0; k < n; k++) {
+                    sticker[j][k] = Integer.parseInt(st.nextToken());
+                }
             }
 
-            dp[0][0] = arr[0][0];
-            dp[1][0] = arr[1][0];
+            // dp[i][j] : i행 j열까지 스티커를 떼었을 때 얻을 수 있는 최대 점수
+            int[][] dp = new int[2][n];
 
-            for(int i = 1; i < N; i++){
-                dp[0][i] = arr[0][i] + Math.max(dp[1][i-1], i > 1 ? dp[1][i-2] : 0);
-                dp[1][i] = arr[1][i] + Math.max(dp[0][i-1], i > 1 ? dp[0][i-2] : 0);
+            dp[0][0] = sticker[0][0];
+            dp[1][0] = sticker[1][0];
+
+            if (n > 1) {
+                dp[0][1] = sticker[1][0] + sticker[0][1];
+                dp[1][1] = sticker[0][0] + sticker[1][1];
             }
 
-            int max = Math.max(dp[0][N-1], dp[1][N-1]);
-            sb.append(max).append("\n");
+            for (int j = 2; j < n; j++) {
+                // 윗 줄 - 현재 값 + 대각선 왼쪽 아래 또는 왼쪽 두 칸 아래에서 오는 최대값
+                dp[0][j] = sticker[0][j] + Math.max(dp[1][j-1], dp[1][j-2]);
+
+                // 아랫 줄 - 현재 값 + 대각선 왼쪽 위 또는 왼쪽 두 칸 위에서 오는 최대값
+                dp[1][j] = sticker[1][j] + Math.max(dp[0][j-1], dp[0][j-2]);
+            }
+
+            int max = Math.max(dp[0][n-1], dp[1][n-1]);
+            System.out.println(max);
         }
-
-        System.out.print(sb);
     }
 }

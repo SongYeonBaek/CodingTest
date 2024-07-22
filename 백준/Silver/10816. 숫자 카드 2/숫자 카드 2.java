@@ -1,45 +1,29 @@
-import java.util.*;
+
 import java.io.*;
- 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.StringTokenizer;
+
 public class Main {
-	
-	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-	static StringTokenizer tokens;
-	
-	public static void main(String[] args) throws IOException {
-		
-		int N = Integer.parseInt(br.readLine());
-		
-		HashMap<Integer,Integer> map = new HashMap<>();
-		
-		tokens = new StringTokenizer(br.readLine());
-		for(int i = 0; i<N; i++) {
-			int num = Integer.parseInt(tokens.nextToken());
-			if(!map.containsKey(num)) {
-				map.put(num, 1);
-			}
-			else {
-				int newValue = map.get(num) + 1;
-				map.put(num, newValue);
-			}
-		}
-		
-		
-		int M = Integer.parseInt(br.readLine());
-		tokens = new StringTokenizer(br.readLine());
-		for(int i = 0; i<M; i++) {
-			int num = Integer.parseInt(tokens.nextToken());
-			if(map.containsKey(num)) {
-				bw.write(map.get(num) + " ");
-			}
-			else {
-				bw.write("0 ");
-			}
-			
-		}
-		bw.flush();
-		bw.close();
-		br.close();
-	}
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int n = Integer.parseInt(br.readLine());
+
+        Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        for (int i = 0; i < n; i++) {
+            int num = Integer.parseInt(st.nextToken());
+            map.put(num, map.getOrDefault(num, 0) + 1);
+        }
+
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        int m = Integer.parseInt(br.readLine());
+        st = new StringTokenizer(br.readLine());
+        for (int i = 0; i < m; i++) {
+            int num = Integer.parseInt(st.nextToken());
+            bw.write(map.getOrDefault(num, 0) + " ");
+        }
+        bw.flush();
+        bw.close();
+    }
 }

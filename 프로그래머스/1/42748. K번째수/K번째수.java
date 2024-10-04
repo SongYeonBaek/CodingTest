@@ -1,15 +1,16 @@
 import java.util.*;
 
 class Solution {
-    public static ArrayList<Integer> solution(int[] array, int[][] commands) {
-        ArrayList<Integer> result = new ArrayList<>();
+    public static int[] solution(int[] array, int[][] commands) {
+        int[] result = new int[commands.length];
         
-        for (int[] command : commands){
-            int[] copy = Arrays.copyOfRange(array, command[0]-1, command[1]);
-            Arrays.sort(copy);
-            result.add(copy[command[2]-1]);
+        int i = 0;
+        for(int[] command : commands) {
+            int[] list  = Arrays.copyOfRange(array, command[0]-1, command[1]);
+            Arrays.sort(list);
+            result[i] = list[command[2]-1];
+            i++;
         }
-        
         return result;
     }
 

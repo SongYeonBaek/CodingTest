@@ -1,60 +1,55 @@
 import java.util.*;
 
 class Solution {
-   static boolean[] visited;
-    static ArrayList<Integer> result;
-
-    //문자 차이가 1인지 유사도를 구하는 함수
-    public static boolean similarity(String target, String word){
-        int count = 0;
-        for (int i = 0; i < target.length(); i++) {
-            if(target.charAt(i) != word.charAt(i)) count++;
-        }
-        if(count == 1) return true;
-        else return false;
-    }
-
-    public static void dfs(String target, String[] words, String word, ArrayList<String> path){
-        if(word.equals(target)) {
-//            System.out.println(path);
-            result.add(path.size());
+    static int answer;
+    static boolean[] visited;
+    
+    public void dfs(String target, String[] words, int now, int depth){
+        //탈출 조건
+        if(words[now].equals(target)) {
+            answer = Math.min(answer, depth);
+            System.out.print(depth);
             return;
         }
-
-
-        for (int i = 0; i < words.length; i++) {
-            if(!visited[i] && similarity(word, words[i])){
-                visited[i] = true;
-                path.add(words[i]);
-                dfs(target, words, words[i], path);
-                path.remove(path.size() - 1);
+        
+        if(depth > words.length) return;
+        
+        visited[now] = true;
+        
+        for(int i=0; i<words.length; i++){
+            if(now == i) continue;
+            if(check(words[i], words[now]) && visited[i] == false){
+                // System.out.print(words[i]);
+                dfs(target, words, i, depth+1);
                 visited[i] = false;
+
             }
         }
-
+        
     }
-
-    public static int solution(String begin, String target, String[] words) {
+    
+    public boolean check(String a, String b){
+        int count = 0;
+    
+        for(int i =0; i<a.length(); i++){
+            if(a.charAt(i) != b.charAt(i)) count++;
+        }
+        
+        return count == 1?true :false;
+    }
+    
+    public int solution(String begin, String target, String[] words) {
+        answer = Integer.MAX_VALUE;
         visited = new boolean[words.length];
-        result = new ArrayList<>();
-
-        for (int i = 0; i < words.length; i++){
-            if(similarity(words[i], begin)) {
-                ArrayList<String> path = new ArrayList<>();
-                path.add(words[i]);
-                visited = new boolean[words.length];
-                visited[i] = true;
-
-                dfs(target, words, words[i], path);
+        
+        for(int i=0; i<words.length; i++){
+            if(check(words[i], begin)){
+                // System.out.print(words[i]);
+                dfs(target, words, i, 1);
+                
             }
         }
-
-        Collections.sort(result);
-//        System.out.println(result);
-
-        if(result.isEmpty()) return 0;
-
-        return result.get(0);
+        
+        return answer == Integer.MAX_VALUE ? 0 : answer;
     }
-
 }
